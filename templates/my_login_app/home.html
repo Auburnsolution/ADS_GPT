@@ -1,0 +1,92 @@
+{% extends 'my_login_app/base.html' %}
+
+
+{% block body_block %}
+
+
+    
+
+    <div class="chat-container1">
+        <div class="chat-window">
+            <h2>Auburn Digital Solutions Chatbot</h2>
+            <div class="left-panel">
+                <form action="{% url 'home' %}" method="post">
+                {%csrf_token%}
+                <div class="new-chat">
+                    <button type="submit" class="btn btn-primary">Start New Chat</button>
+                </form>
+                    <div class="pull-right"><i class="fa fa-edit"></i></div>
+                </div>
+              <!-- code Your own -->
+                <!-- <div>
+                    {% for record in history %}
+                    <div class="chat-message">
+                        <div class="message-content">
+                            {{ record.message|linebreaksbr }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div> -->
+
+
+
+
+
+            </div>
+            <div id="chat-messages" style="text-align:left; background:#fff; padding:10px; height:400px;overflow-y:scroll; font-size:14px;margin-bottom:20px;color:#222;">
+                
+                {% block content %}
+                {% endblock%}
+            </div>
+            <form action="{% url 'message_response' %}" method="POST">
+                {%csrf_token%}
+            <div class="chat-input">
+              <div class="form-group">
+                <input type="radio" id="role1" name="role" value="I am an Employee">
+                <label for="role1"> I am an employee</label><br>
+              </div>
+              <div class="form-group">
+                <input type="radio" id="role2" name="role" value="I am a boss">
+                <label for="role2"> I am a boss</label><br>
+                </div>
+                <div class="form-group">
+                <input type="radio" id="role3" name="role" value="I am a content writer">
+                <label for="role3"> I am a content writer</label><br>
+                </div>
+                <div class="form-group">
+                <input type="radio" id="role4" name="role" value="I am a content customer">
+                <label for="role4"> I am a content customer</label><br>
+                 </div>
+          
+                <input type="text" name="chat-input1" placeholder="Got questions? I've got bytes of knowledge..." class="">
+                <input class="btn btn-primary" type="submit" value="submit">
+               
+
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- to present chat history -->
+    
+    <!-- <div>
+        <div class="chat-container">
+            {% for record in history %}
+                <div class="chat-message user-message">
+                    <div class="message-content">
+                        {{ record.message|linebreaksbr }}
+                    </div>
+                    <div class="message-time">{{ record.timestamp }}</div>
+                </div>
+                <div class="chat-message bot-message">
+                    <div class="message-content">
+                        {{ record.response|linebreaksbr }}
+                    </div>
+                    <div class="message-time">{{ record.timestamp }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div> -->
+
+{% endblock %}
+
