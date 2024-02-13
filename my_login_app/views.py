@@ -73,28 +73,35 @@ def logout_view(request):
 
 def login_view(request):
 
+    if request.user.is_authenticated:
+        history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')
+        for record in history:
+            record.response = record.response.replace('<br>', '\n')
 
-    if(request.method =="POST"):
-
-        email=request.POST.get('email')
-        password=request.POST.get('password')
-
-        user=MyEmailBackend.authenticate(request=request,username=email,password=password)
-
-        if user:
-            if user.is_active:
-                login(request,user)
-                return HttpResponseRedirect(reverse('home'))
-            else:
-                return HttpResponse("User is not Active.")
-
-        else:
-            return HttpResponse("Wrong login details provided.")
-
-
+        return render(request,'my_login_app/home.html',{'history': history})
 
     else:
-        return render(request,'my_login_app/login.html')
+        if(request.method =="POST"):
+
+            email=request.POST.get('email')
+            password=request.POST.get('password')
+
+            user=MyEmailBackend.authenticate(request=request,username=email,password=password)
+
+            if user:
+                if user.is_active:
+                    login(request,user)
+                    return HttpResponseRedirect(reverse('home'))
+                else:
+                    return HttpResponse("User is not Active.")
+
+            else:
+                return HttpResponse("Wrong login details provided.")
+
+
+
+        else:
+            return render(request,'my_login_app/login.html')
 
 
 def profile_view(request):
