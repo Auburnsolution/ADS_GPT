@@ -1,0 +1,17 @@
+# Ignore virtual environment
+myvenv/
+
+# Ignore database file
+db.sqlite3
+
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore environment-specific settings file
+
+
+
+
+# Ignore app-specific configuration file
+my_login_app/config.py

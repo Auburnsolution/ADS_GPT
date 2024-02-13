@@ -1,92 +1,219 @@
-{% extends 'my_login_app/base.html' %}
-
-
-{% block body_block %}
-
-
-    
-
-    <div class="chat-container1">
-        <div class="chat-window">
-            <h2>Auburn Digital Solutions Chatbot</h2>
+{% extends 'my_login_app/base.html' %} {% block body_block %} <div class="chat-container1">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="chat-window">
+            <!-- <h2>Auburn Digital Solutions Chatbot</h2> -->
             <div class="left-panel">
-                <form action="{% url 'home' %}" method="post">
-                {%csrf_token%}
-                <div class="new-chat">
-                    <button type="submit" class="btn btn-primary">Start New Chat</button>
-                </form>
-                    <div class="pull-right"><i class="fa fa-edit"></i></div>
-                </div>
-              <!-- code Your own -->
-                <!-- <div>
-                    {% for record in history %}
-                    <div class="chat-message">
-                        <div class="message-content">
-                            {{ record.message|linebreaksbr }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div> -->
-
-
-
-
-
-            </div>
-            <div id="chat-messages" style="text-align:left; background:#fff; padding:10px; height:400px;overflow-y:scroll; font-size:14px;margin-bottom:20px;color:#222;">
-                
-                {% block content %}
-                {% endblock%}
-            </div>
-            <form action="{% url 'message_response' %}" method="POST">
-                {%csrf_token%}
-            <div class="chat-input">
-              <div class="form-group">
-                <input type="radio" id="role1" name="role" value="I am an Employee">
-                <label for="role1"> I am an employee</label><br>
+              <form action="{% url 'home' %}" method="post"> {%csrf_token%} <div class="new-chat">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-plus-circle"></i> Start New Chat </button>
+              </form>
+              <div class="edit-icon">
+                <i class="fa fa-edit"></i>
               </div>
-              <div class="form-group">
-                <input type="radio" id="role2" name="role" value="I am a boss">
-                <label for="role2"> I am a boss</label><br>
-                </div>
-                <div class="form-group">
-                <input type="radio" id="role3" name="role" value="I am a content writer">
-                <label for="role3"> I am a content writer</label><br>
-                </div>
-                <div class="form-group">
-                <input type="radio" id="role4" name="role" value="I am a content customer">
-                <label for="role4"> I am a content customer</label><br>
-                 </div>
-          
-                <input type="text" name="chat-input1" placeholder="Got questions? I've got bytes of knowledge..." class="">
-                <input class="btn btn-primary" type="submit" value="submit">
-               
-
             </div>
-            </form>
+            <div class="chats-history">
+              <div class="">
+                <div id="accordionExample" class="accordion shadow">
+                  <!-- Accordion item 1 -->
+                  <div class="card">
+                    <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                      <h2 class="mb-0">
+                        <button type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn btn-link text-dark font-weight-bold text-uppercase collapsible-link">
+                          <i class="fa fa-calendar"></i> History </button>
+                      </h2>
+                      
+                    
+                    </div>
+                    
+                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
+                      <div class="card-body">
+                        <ul>
+                          {% for record in history|slice:":15" %}
+                          <li>
+                            <a href="#" class="history-item" data-message="{{ record.response|linebreaksbr }}" >{{ record.message|linebreaksbr }}</a>
+                          </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <!-- End -->
+                  <!-- Accordion item 2 -->
+                  <!-- <div class="card">
+                    <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+                      <h2 class="mb-0">
+                        <button type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="btn btn-link collapsed text-dark font-weight-bold text-uppercase collapsible-link">
+                          <i class="fa fa-calendar"></i> Previous 7 Days </button>
+                      </h2>
+                    </div>
+                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
+                      <div class="card-body">
+                        <ul>
+                          <li>
+                            <a href="#">List Item 1</a>
+                          </li>
+                          <li>
+                            <a href="#">List Item 1</a>
+                          </li>
+                          <li>
+                            <a href="#">List Item 1</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- End -->
+                  <!-- Accordion item 3 -->
+                  <!-- <div class="card">
+                    <div id="headingThree" class="card-header bg-white shadow-sm border-0">
+                      <h2 class="mb-0">
+                        <button type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="btn btn-link collapsed text-dark font-weight-bold text-uppercase collapsible-link">
+                          <i class="fa fa-calendar"></i> 2023 </button>
+                      </h2>
+                    </div>
+                    <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
+                      <div class="card-body p-5">
+                        <ul>
+                          <li>
+                            <a href="#">List Item 1</a>
+                          </li>
+                          <li>
+                            <a href="#">List Item 1</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- End -->
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
+      </div>
+      <div class="col-sm-9">
+        <div class="msg-container">
+          <div id="chat-messages"> {% block content %} {% endblock%} </div>
+          <div class="msg-input">
+            <div class="row d-flex justify-content-center">
+              <div class="col-sm-12">
+                <form id="chatForm" action="{% url 'message_response' %}" method="POST"> {%csrf_token%} <div class="chat-input">
+                    
+                  <div class="row"  >
+                    
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="radio" id="role1" name="role" value="Person One">
+                          <label for="role1"> Person One</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="radio" id="role2" name="role" value="Person Two">
+                          <label for="role2"> Person Two</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="radio" id="role3" name="role" value=" Person Three">
+                          <label for="role3"> Person Three</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <input type="radio" id="role4" name="role" value="Person Four">
+                          <label for="role4"> Person Four</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+
+                      <div class="col-sm-12">
+                        <input type="text" name="chat-input1" placeholder="Got questions? I've got bytes of knowledge..." class="chat01">
+                        <!-- <input class="btn btn-primary" type="submit" value="submit"> -->
+                        <button id="submitButton" type="submit" value="submit" class="send_btn">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  </div>
+  </div>
+  <!-- to present chat history -->
+  <!-- <div><div class="chat-container">
+              {% for record in history %}
+                  <div class="chat-message user-message"><div class="message-content">
+                          {{ record.message|linebreaksbr }}
+                      </div><div class="message-time">{{ record.timestamp }}</div></div><div class="chat-message bot-message"><div class="message-content">
+                          {{ record.response|linebreaksbr }}
+                      </div><div class="message-time">{{ record.timestamp }}</div></div>
+              {% endfor %}
+          </div></div> --> 
+          
+   <!-- to show history messages -->
+   <!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var historyItems = document.querySelectorAll('.history-item');
+      historyItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var message = this.dataset.message;
+          document.getElementById('chat-messages').innerText = message;
+        });
+      });
+    });
+  </script> -->
 
-    <!-- to present chat history -->
-    
-    <!-- <div>
-        <div class="chat-container">
-            {% for record in history %}
-                <div class="chat-message user-message">
-                    <div class="message-content">
-                        {{ record.message|linebreaksbr }}
-                    </div>
-                    <div class="message-time">{{ record.timestamp }}</div>
-                </div>
-                <div class="chat-message bot-message">
-                    <div class="message-content">
-                        {{ record.response|linebreaksbr }}
-                    </div>
-                    <div class="message-time">{{ record.timestamp }}</div>
-                </div>
-            {% endfor %}
-        </div>
-    </div> -->
+  <!-- to show the history reponse  -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var historyItems = document.querySelectorAll('.history-item');
+      historyItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var message = this.dataset.message;
+          var formattedMessage = message.replace(/<br>/g, '\n'); // Replace <br> with line breaks
+          document.getElementById('chat-messages').innerText = formattedMessage;
+        });
+      });
+    });
+  </script>
+  
+<!-- to disable the options -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get all history items
+    var historyItems = document.querySelectorAll('.history-item');
 
-{% endblock %}
+    // Function to disable the form
+    function hideForm() {
+      document.getElementById('chatForm').style.display = 'none';
+    }
 
+    // Add click event listener to each history item
+    historyItems.forEach(function(item) {
+      item.addEventListener('click', function() {
+        // Hide the form when a history item is clicked
+        hideForm();
+      });
+    });
+  });
+</script>
+
+<!-- to disable the submit button -->
+
+
+
+   
+          
+          {% endblock %}

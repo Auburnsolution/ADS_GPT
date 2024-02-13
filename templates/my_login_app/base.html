@@ -1,206 +1,429 @@
-<!DOCTYPE html>
-
-{% load static %}
-
-<html>
-<head>
+<!DOCTYPE html> {% load static %} <html>
+  <head>
     <link href="{% static 'css/basic.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" />
 
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!-- <a class="navbar-brand" href="#">Home</a> -->
-
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-
-
-            <ul class="navbar-nav mr-auto">
-                {% if not user.is_authenticated %}
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'registration' %}">Registration <span class="sr-only">(current)</span></a>
-                </li>
-                {% endif %}
-
-                {% if request.user.is_authenticated %}
-
-                <li class="nav-item logout">
-                    <a class="nav-link " href="{% url 'my_login_app:logout' %}">Logout</a>
-                </li>
-
-
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_login_app:login' %}">Login</a>
-                </li>
-
-
-
-                {% endif %}
-
-            </ul>
-
-        </div>
-    </nav>
-
+   <link rel="shortcut icon" href="https://auburnsolutions.com/images/logo.png" type="image/x-icon"> 
     <title>GPT AI Chat</title>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background:#fff;
+      @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
-        }
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: "Quicksand", sans-serif;
+        background: #eef0f8;
+      }
 
-        .chat-message{
-            height: 80%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+      a,
+      p,
+      h2,
+      h1,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: #475f7b !important;
+      }
 
-        }
-        .chat-container {
-            background-color: #fff;
-            position: relative;
-            height: 100%;
-          
-            width: 100%;
-    float: right;
-    margin-left: 262px;
+      ul {
+        margin: 0;
+        padding: 0;
+      }
 
-        }
-        .new-chat i{    color: #fff;
-    padding: 23px;
-    font-size: 12px;
-}
-        .chat-window {
-            width: 100%;
-            max-width: 100%;
-            background-color: #fff;
-            color: white;
-            /* padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
-            border-radius: 5px;
-        }
-        .chat-input .form-group {
-    border: 1px solid #ddd;
-    width: 47%;
-    float: left;
-    margin: 0px 7px 14px;
-    border-radius: 14px;
-    padding: 9px 27px;
-}
-.chat-input label {
-    color: #000;
-    font-weight: bold;
-    font-size: 13px;
-}
-.chat-input input{position: relative;
-    top: 2px;
-}
+      ul li {
+        list-style-type: none;
+      }
 
-a.nav-link.logout {
-    position: absolute;
-    right: 0;
-    z-index: 9999;
-    font-weight: bold;
-    font-size: 12px;
-}
-        .chat-input {
-            margin-top: 20px;
-            width: 75%;
-            margin:0 auto;
-        }
-        input[type="text"] {
-    width: 81%;
-    padding: 13px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    margin-left: 8px;
-    font-size: 13px;
-}
-        input[type="submit"] {
-    padding: 13px 25px;
-    border: none;
-    border-radius: 5px;
-    background-color: #62311b;
-    color: #fff;
-    cursor: pointer;
-    margin-top: 0;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-.login-form input {
-    font-size: 13px;
-}
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+      a:hover {
+        text-decoration: none;
+      }
 
-        
-    .left-panel {
-    position: fixed;
-    left: 0;
-    top: 50px;
-    width:19%;
-    background: #000;
-    bottom: 0;
-}
-.chat-container1 {
-    width: 81%;
-    position: relative;
-    bottom: 57px;
-    float: right;
-}   
-.chat-window h2 {
-    font-size: 15px;
-    padding: 17px 7px 0px;
-    color: #333;
-    font-weight: bold;
-    font-family: sans-serif;
-}
+      header {
+        background-color: #fff;
+      }
 
-.type-01{width: 100%!important;}
-.left-panel .btn {
-    background: none;
-    border: none;
+      .logo img {
+        width: 20%;
+        padding: 9px;
+      }
+
+      .logo span {
+        font-weight: 700;
+      }
+
+      li.nav-item.logout a {
+        font-size: 16px;
+        padding: 0px 0px 3px;
+        font-weight: 800;
+      }
+
+      .left-panel {
+        background: #f7f9fb;
+        border-top: 0;
+        margin-bottom: 17px;
+        margin-top: 18px;
+        border-radius: 10px;
+        padding: 0px;
+        -webkit-transition: .5s;
+        transition: .5s;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        box-shadow: 0px 0px 5px 0px rgba(71, 95, 123, 0.2);
+      }
+
+      .new-chat {
+        color: #475f7b;
+        display: block;
+        padding: 1.5rem 1.5rem;
+        position: relative;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background: #fff;
+      }
+
+      .new-chat button {
+        color: #475f7b;
+        background: no-repeat;
+        border: navajowhite;
+        padding: 0;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .new-chat button:hover,
+      .new-chat button:focus {
+        background: none;
+        border: none;
+        color: #475f7b;
+        box-shadow: none;
+      }
+
+      .new-chat i:hover {
+        color: #0056b3;
+        cursor: pointer;
+      }
+
+      .chats-history {
+        padding: 1.5rem 1.5rem;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        border-radius: 10px;
+      }
+
+      .history-bar {
+        background: #fff;
+        padding: 20px;
+        border-radius: 23px;
+        margin-bottom: 26px;
+        box-shadow: 0px 4px 13px 0px rgba(25, 42, 70, 0.13) !important;
+      }
+
+      .card i {
+        color: #bd85cf;
+      }
+      .card-body {
+    height: 375px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.card-body ul li {
+    background: #f7f9fb;
+    padding: 10px;
+    margin: 4px 0px;
+    border-radius: 7px;
     font-size: 11px;
-    font-weight: bold;
-    padding: 20px;
+    font-weight: 500;
+    height: 48px;
+    overflow: hidden;
+}
+      .btn-link:hover {
+        text-decoration: none;
+      }
+
+      div#chat-messages {
+    height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background: #fff;
+    margin-top: 1rem;
+    border-radius: 11px;
+    padding: 30px;
+    font-size: 13px;
+    color: #000;
+    font-weight: 600;
+    line-height: 28px;
+}
+      .chat-input .form-group {
+    background: #f7f9fb;
+    border-radius: 13px;
+    padding: 13px 14px 6px;
+    margin: 19px 0px 0px;
+    border: 2px solid #f7f9fb;
+    width: 100%;
+    font-weight: 500;
+    font-size: 15px;
+    color: #757575;
+    /* box-shadow: 2px 2px 10px 2px #f7f9fb; */
+}
+      .chat01 {
+        width: 94%;
+        border-radius: 13px;
+        margin-top: 24px;
+        padding: 16px;
+        border: 2px solid #f7f9fb;
+        color: #757575;
+        box-shadow: 2px 2px 10px 2px #f7f9fb;
+        font-size: 12px;
+      }
+
+      .send_btn {
+        background-color: #6993ff;
+        border-color: #6993ff;
+        color: #fff;
+        box-shadow: none;
+        border: none;
+        padding: 9px 13px;
+        border-radius: 100%;
+        cursor: pointer;
+      }
+
+      .sub_btn {
+        border-radius: 7px;
+        background-color: #6993ff;
+        border-color: #6993ff;
+        color: #fff;
+        box-shadow: none;
+        border: none;
+        padding: 8px 22px;
+        cursor: pointer;
+      }
+
+      .send_btn:hover {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        overflow: hidden;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        vertical-align: middle;
+        z-index: 1;
+        transition: .3s ease-out;
+        box-shadow: 2px 2px 2px 2px #6993ff;
+        
+      }
+
+      .msg-container {
+    background: #fff;
+    padding-bottom: 20px;
+    border-radius: 10px;
+    height: 566px;
 }
 
-.chat-message{
-    background-color: rgb(0, 26, 255);
+      .chat-input {
+        padding: 1rem 4rem 0.4rem;
+      }
+
+      .edit-icon {
+    float: right;
+}
+.navbar{padding:0;}
+
+body.dark {
+    background-color:#1c2e4c;
+    color: #b5b5c3;
+}
+/* body.dark header{ background-color: #1c2e4c;} */
+
+
+body.dark .login-form{background-color: #0c1a32 !important;
+    color: #ffffff !important;
+}
+body.dark .login-form label, body.dark .login-form h1{color: #fff!important;}
+.dark .new-chat{border-bottom: 1px solid rgba(255, 255, 255, 0.12);background:inherit;}
+.dark .new-chat {color:#fff; opacity: 0.5;}
+.dark .left-panel {
+    background-color: #0c1a32;
+    box-shadow: -7.829px 11.607px 21px 0px rgba(25, 42, 70, 0.13);
+}
+body.dark h1, body.dark .support a {color: #fff;}
+
+.checkbox {
+  opacity: 0;
+ 
 }
 
+.checkbox-label {
+  background-color: #111;
+  width: 50px;
+  height: 26px;
+  border-radius: 50px;
+  position: relative;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-moon {color: #f1c40f;}
+
+.fa-sun {color: #f39c12;}
+
+.checkbox-label .ball {
+  background-color: #fff;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+.checkbox:checked + .checkbox-label .ball {
+  transform: translateX(24px);
+}
+
+/*  Support me if you like it */
+.support {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+}
+
+.support a {
+  color: #292c35;
+  font-size: 32px;
+  backface-visibility: hidden;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.support a:hover{
+  transform: scale(1.1);
+}
+li.nav-item.logout {
+    padding: 1rem 0;
+}
     </style>
-
-
-</head>
-
-<body>
+  </head>
+  <body>
+    <header>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-5">
+            <div class="logo">
+              <a class="navbar-brand">
+                <img src="https://auburnsolutions.com/images/logo.png">
+                <span>Auburn ChatBox</span>
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <nav class="navbar navbar-expand-lg navbar-light">
+              <!-- <a class="navbar-brand" href="#">Home</a> -->
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto"> {% if not user.is_authenticated %} <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'registration' %}">Registration <span class="sr-only">(current)</span>
+                    </a>
+                  </li> {% endif %} {% if request.user.is_authenticated %} <li class="nav-item logout">
+                    <a class="nav-link " href="{% url 'my_login_app:logout' %}">
+                      <i class="fa fa-sign-out"></i> Logout </a>
+                  </li> {% else %} <li class="nav-item">
+                    <a class="nav-link" href="{% url 'my_login_app:login' %}">Login</a>
+                  </li> {% endif %} </ul>
+              </div>
+              
+<!-- <div>
+    <input type="checkbox" class="checkbox" id="checkbox">
+    <label for="checkbox" class="checkbox-label">
+      <i class="fa fa-moon"></i>
+      <i class="fa fa-sun"></i>
+      <span class="ball"></span>
+    </label>
+  </div> -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
     <div class="chat-container">
-       
-    <!-- <div class="container"> -->
-        {% block body_block %}
-
-        {% endblock %}
-    <!-- </div> -->
+      <!-- <div class="container"> --> {% block body_block %} {% endblock %}
+      <!-- </div> -->
     </div>
+    <script>
+      window.onload = function() {
+        var chatContainer = document.querySelector('.chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    </script>
 
     <script>
-        window.onload = function() {
-            var chatContainer = document.querySelector('.chat-container');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
+        const checkbox = document.getElementById("checkbox")
+checkbox.addEventListener("change", () => {
+  document.body.classList.toggle("dark")
+  
+})
     </script>
-    
 
-</body>
+  <!-- to disable the submit button untill all things are selected -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var submitButton = document.getElementById('submitButton');
+    var radioButtons = document.querySelectorAll('input[type="radio"]');
+    var textBox = document.querySelector('input[name="chat-input1"]');
+
+    // Function to check if any radio button is selected
+    function isRadioButtonSelected() {
+      for (var i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Function to check if text box is filled
+    function isTextBoxFilled() {
+      return textBox.value.trim() !== '';
+    }
+
+    // Function to enable or disable submit button
+    function toggleSubmitButton() {
+      submitButton.disabled = !(isRadioButtonSelected() && isTextBoxFilled());
+    }
+
+    // Add event listeners to radio buttons and text box
+    radioButtons.forEach(function (radioButton) {
+      radioButton.addEventListener('change', toggleSubmitButton);
+    });
+    textBox.addEventListener('input', toggleSubmitButton);
+
+    // Event listener for form submission
+    document.getElementById('chatForm').addEventListener('submit', function (event) {
+      if (!isRadioButtonSelected() || !isTextBoxFilled()) {
+        event.preventDefault();
+        alert('Please select a role and fill out the text box before submitting.');
+      }
+    });
+
+    // Initially disable submit button
+    toggleSubmitButton();
+  });
+</script>
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

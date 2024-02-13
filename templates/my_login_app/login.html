@@ -1,58 +1,63 @@
-{% extends 'my_login_app/base.html' %}
-
-
-{% block body_block %}
-<div class="login-form">
-<h1>Login</h1>
-
-
-<form method="post">
-
-    {% csrf_token %}
-
-    <div class="form-group">
-
-    <label> Email </label>
-    <input type="email" name="email" class="form-control" value="" />
+{% extends 'my_login_app/base.html' %} {% block body_block %}
+<div class="container-fluid">
+<div class="row">
+    <div class="col-sm-6 no-padding">
+        <div class="right-img bg-white">
+            <img src="https://img.freepik.com/premium-vector/mobile-chat-bot-flat-style-design-vector-illustration-stock-illustration_357500-626.jpg" width="100%">
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="login-form">
+     
+            <h1>Login</h1>
+            <form method="post"> {% csrf_token %} <div class="form-group">
+                <label> Email </label>
+                <input type="email" name="email" class="form-control" value="" />
+              </div>
+              <div class="form-group">
+                <label> Password </label>
+                <input type="password" name="password" class="form-control" value="" />
+              </div>
+              <div class="text-center">
+                <input type="submit" name="" value="Login" class="sub_btn" />
+              </div>
+            </form>
+          </div> 
+    </div>
 </div>
-<div class="form-group">
-    <label> Password </label>
-    <input type="password" name="password" class="form-control" value="" />
 </div>
-<div class="text-center">
-    <input type="submit" name="" value="Login"  class="sub_btn"/>
-</div>
-
-</form>
-
-</div>
-
-
-
-<style>
-  .login-form {
-    width: 25%;
-    background: #fff;
-    padding: 20px;
-    border-radius: 14px;
-    margin: 0 auto;
-    border: 1px solid #ddd;
+  <style>
+    .nav-link {
+    display: block;
+    padding: 1.5rem 1rem;
+    font-weight: 600;
 }
-.login-form h1 {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin: 17px;
-    text-transform: uppercase;
-    font-weight: 900;
+ .right-img {
+    padding: 5rem 0 4rem;
 }
-
-.login-form label {
-    font-size: 13px;
-    color: #777575;
-}
-
-
-</style>
-
-{% endblock %}
+    .no-padding{padding:0;}
+    .no-margin{margin:0;}
+    .login-form {
+      width: 50%;
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      margin-top: 6rem;
+    }
+  
+    .login-form h1 {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin: 17px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+  
+    .login-form label {
+      font-size: 13px;
+      color: #777575;
+    }
+  </style> {% endblock %}

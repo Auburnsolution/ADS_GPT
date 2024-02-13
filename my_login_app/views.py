@@ -3,7 +3,16 @@ from django.contrib.auth.models import User
 from my_login_app.models import UserProfile
 import sys
 from openai import OpenAI
-client = OpenAI(api_key='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')
+import os
+
+
+#  fetching from config method.
+from . import config
+api_key=config.OPENAI_API_KEY
+client = OpenAI(api_key=api_key)
+
+
+
 
 from pathlib import Path
 from django.http import HttpResponseRedirect,HttpResponse
@@ -23,7 +32,7 @@ def home(request):
                 for record in history:
                     record.response = record.response.replace('<br>', '\n')
                 return render(request,'my_login_app/home.html',{'history': history})
-            else:
+            else:   
                 return render(request,'my_login_app/login.html')
             
 
@@ -124,37 +133,49 @@ def profile_view(request):
 
 def message_response(request):
     if request.user.is_authenticated:
-        if request.method=="POST":
+        if request.method == "POST":
             received_message = request.POST.get('chat-input1','')
-            received_role= request.POST.get('role')
-            # print(received_message)
-            #  return HttpResponse(received_message)
+            received_role = request.POST.get('role')
 
-            original_message= received_role + ' And  ' + received_message
-            print(original_message)
+            original_message = received_role + ' And  ' + received_message
 
+            # Assuming you have already configured the OpenAI client
             response = client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
-            response_format={ "type": "json_object" },
-            messages=[
-                            {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
-                            {"role": "user", "content": original_message}
-                                    ]
-                                )
+                model="gpt-3.5-turbo-1106",
+                response_format={ "type": "json_object" },
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
+                    {"role": "user", "content": original_message}
+                ]
+            )
 
             response_string = response.choices[0].message.content
             # Assuming the response string is formatted like a JSON object, let's parse it.
-            # Remove the curly braces at the beginning and end, then replace escaped newlines and quotes
             formatted_response = response_string.strip("{}").replace('\\n', '<br>').replace('\\"', '"').replace('\n','<br>')
 
-            #save chat history on backend
+            # Save chat history on backend
             user_message = original_message
             bot_response = formatted_response
+
+            # Retrieve the latest 15 records for the user
+            history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')[:15]
+            total_records = ChatHistory.objects.filter(user=request.user).count()
+
+            if total_records > 15:
+                oldest_records_ids = ChatHistory.objects.filter(user=request.user).order_by('timestamp').values_list('id', flat=True)[:total_records - 15]
+                ChatHistory.objects.filter(id__in=oldest_records_ids).delete()
+
             ChatHistory.objects.create(user=request.user, message=user_message, response=bot_response)
 
+            # Retrieve the latest 15 records again after creating the new entry
+            history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')[:15]
+
+            # Modify the response format to replace <br> with newline characters for display
+            for record in history:
+                record.response = record.response.replace('<br>', '\n')
 
             # Return the formatted string, marked as safe to render as HTML
-            return render(request, 'my_login_app/response.html', {'response': formatted_response})
+            return render(request, 'my_login_app/response.html', {'response': formatted_response, 'history': history})
     
     else:
-            return render(request,'my_login_app/login.html')
+        return render(request,'my_login_app/login.html')
