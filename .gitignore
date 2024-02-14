@@ -11,7 +11,3 @@ __pycache__/
 # Ignore environment-specific settings file
 .env
 
-
-
-# Ignore app-specific configuration file
-my_login_app/config.py

@@ -183,11 +183,19 @@
         item.addEventListener('click', function() {
           var message = this.dataset.message;
           var formattedMessage = message.replace(/<br>/g, '\n'); // Replace <br> with line breaks
-          document.getElementById('chat-messages').innerText = formattedMessage;
+          var chatMessages = document.getElementById('chat-messages');
+          
+          // Increase the size of chat-messages box
+          chatMessages.style.height = '550px'; // Adjust the height as needed
+          
+          
+          // Set the formatted message to chat-messages
+          chatMessages.innerText = formattedMessage;
         });
       });
     });
   </script>
+  
   
 <!-- to disable the options -->
 <script>

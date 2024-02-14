@@ -8,9 +8,6 @@ import os
 
 #  fetching from config method.
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-print(os.environ)
-print(os.getenv('SECRET_KEY'))
-print(OPENAI_API_KEY)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 
