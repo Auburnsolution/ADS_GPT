@@ -7,9 +7,11 @@ import os
 
 
 #  fetching from config method.
-from . import config
-api_key=config.OPENAI_API_KEY
-client = OpenAI(api_key=api_key)
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+print(os.environ)
+print(os.getenv('SECRET_KEY'))
+print(OPENAI_API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 

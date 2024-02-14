@@ -9,7 +9,7 @@ db.sqlite3
 __pycache__/
 
 # Ignore environment-specific settings file
-
+.env
 
 
 
