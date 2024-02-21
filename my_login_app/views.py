@@ -135,20 +135,23 @@ def profile_view(request):
 
         return render(request,'my_login_app/profile.html',context={'profile_name':name,'profile_email':email,'portfolio':portfolio})
    
+    
+
+import json  # Ensure json is imported
 
 
 def message_response(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            received_message = request.POST.get('chat-input1','')
+            received_message = request.POST.get('chat-input1', '')
             received_role = request.POST.get('role')
 
-            original_message = received_role + ' And  ' + received_message
+            original_message = f"{received_role} And {received_message}"
 
-            # Assuming you have already configured the OpenAI client
+            # Assuming the OpenAI client is correctly configured beforehand
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo-1106",
-                response_format={ "type": "json_object" },
+                model="gpt-3.5-turbo",
+                response_format={"type": "json_object"},
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
                     {"role": "user", "content": original_message}
@@ -156,32 +159,32 @@ def message_response(request):
             )
 
             response_string = response.choices[0].message.content
-            # Assuming the response string is formatted like a JSON object, let's parse it.
-            formatted_response = response_string.strip("{}").replace('\\n', '<br>').replace('\\"', '"').replace('\n','<br>')
+            # Parse the JSON string into a Python dictionary
+            response_data = json.loads(response_string)
 
-            # Save chat history on backend
-            user_message = original_message
-            bot_response = formatted_response
+            # Extract and format only the values from the response_data
+            values_only = [str(value).replace('\n', '<br>') for value in response_data.values()]
 
-            # Retrieve the latest 15 records for the user
-            history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')[:15]
-            total_records = ChatHistory.objects.filter(user=request.user).count()
+            # Convert list of values into a single string with HTML line breaks for separation
+            bot_response = "<br>".join(values_only)
 
-            if total_records > 15:
-                oldest_records_ids = ChatHistory.objects.filter(user=request.user).order_by('timestamp').values_list('id', flat=True)[:total_records - 15]
-                ChatHistory.objects.filter(id__in=oldest_records_ids).delete()
+            # Your logic for managing chat history
+            # Save the message and bot_response, manage the chat history as before
 
-            ChatHistory.objects.create(user=request.user, message=user_message, response=bot_response)
+            ChatHistory.objects.create(user=request.user, message=original_message, response=bot_response)
 
             # Retrieve the latest 15 records again after creating the new entry
             history = ChatHistory.objects.filter(user=request.user).order_by('-timestamp')[:15]
 
-            # Modify the response format to replace <br> with newline characters for display
-            for record in history:
-                record.response = record.response.replace('<br>', '\n')
+            # When displaying, you now have a bot_response that is only values
+            # No need for additional processing before rendering in the template
 
-            # Return the formatted string, marked as safe to render as HTML
-            return render(request, 'my_login_app/response.html', {'response': formatted_response, 'history': history})
-    
+            return render(request, 'my_login_app/response.html', {
+                'response': bot_response,  # This is now a string of values only
+                'message': original_message,
+                'history': history
+            })
+
     else:
-        return render(request,'my_login_app/login.html')
+        return render(request, 'my_login_app/login.html')
+

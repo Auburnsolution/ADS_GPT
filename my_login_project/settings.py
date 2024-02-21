@@ -35,7 +35,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -147,7 +147,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     STATIC_DIR
-    
     ]
 
 MEDIA_ROOT=MEDIA_DIR
@@ -159,3 +158,6 @@ MEDIA_URL='/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+STATIC_ROOT = BASE_DIR / 'staticfiles' 
